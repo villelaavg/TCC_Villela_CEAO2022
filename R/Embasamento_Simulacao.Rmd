@@ -1,0 +1,135 @@
+---
+title: "Embasamento_Simulacao"
+author: "VILLELA"
+date: '2022-07-13'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(data.table)
+library(ggpubr) 
+library(cowplot)
+library(MASS)
+library(gridExtra)
+library(geosphere)
+library(readxl)
+library(rworldmap)
+library(rworldxtra) #rworldmap em alta resolução.
+library(knitr)
+library(readxl)
+```
+
+
+```{r}
+#Importa os banco de dados
+resultados_azimute <- read_excel("Python/CEAO22/resultados_azimute.xlsx")
+DF_SAR <- read_excel("DF_SAR.xlsx")
+```
+
+
+```{r}
+# Verifica a classe dos dados
+str(resultados_azimute)
+
+# Transformar a coluna dataset em categórica
+resultados_azimute$dataset <- as.factor(resultados_azimute$dataset)
+```
+
+
+```{r}
+# Estatísticas da distância do centro da APG para a Base
+hist(resultados_azimute$`distância centro-base`, 
+     ylim = c(0,40), 
+     las = 1, 
+     main = "Centro - Base",
+     xlab = "Distância (NM)",
+     ylab = "Frequência")
+abline(v = mean(resultados_azimute$`distância centro-base`), 
+       lty = "dashed", col = "red")
+abline(v = median(resultados_azimute$`distância centro-base`), 
+       lty = "dashed", col = "blue")
+
+boxplot(resultados_azimute$`distância centro-base`, 
+        ylab = "Distância (NM)",
+        main = "Centro - Base")
+
+plot(resultados_azimute$`distância centro-base`, 
+     main = "Centro - Base",
+     ylab = "Distância (NM)")
+abline(h = c(40, 100, 150, 360), lty = "dashed", col = "red")
+
+summary(resultados_azimute$`distância centro-base`)
+```
+```{r}
+# Estatísticas dos azimutes do centro para a base
+hist(resultados_azimute$`ângulo centro-base`, 
+     ylim = c(0,40), 
+     las = 1, 
+     main = "Centro - Base",
+     xlab = "Distância (NM)",
+     ylab = "Frequência")
+abline(v = mean(resultados_azimute$`ângulo centro-base`), 
+       lty = "dashed", col = "red")
+abline(v = median(resultados_azimute$`ângulo centro-base`), 
+       lty = "dashed", col = "blue")
+
+boxplot(resultados_azimute$`ângulo centro-base`, 
+        ylab = "Ângulos em graus",
+        main = "Azimutes")
+
+plot(resultados_azimute$`ângulo centro-base`, 
+     main = "Azimutes",
+     ylab = "Ângulos em graus")
+
+summary(resultados_azimute$`ângulo centro-base`)
+```
+```{r}
+DF_SAR$ARCC <- as.factor(DF_SAR$ARCC)
+DF_SAR$ORIGEM <- as.factor(DF_SAR$ORIGEM)
+DF_SAR$DESTINO <- as.factor(DF_SAR$DESTINO)
+DF_SAR$LAT_AVISTAMENTO <- as.numeric(DF_SAR$LAT_AVISTAMENTO)
+DF_SAR$LONG_AVISTAMENTO <- as.numeric(DF_SAR$LONG_AVISTAMENTO)
+DF_SAR$TIPO_OBJETO <- as.factor(DF_SAR$TIPO_OBJETO)
+DF_SAR$BASE <- as.factor(DF_SAR$BASE)
+DF_SAR$OBJETO_BUSCA <- as.factor(DF_SAR$OBJETO_BUSCA)
+```
+
+```{r}
+str(DF_SAR)
+```
+
+```{r}
+summary(DF_SAR$Distancia_LKP_Dest)
+
+hist(DF_SAR$Distancia_LKP_Dest, 
+     ylim = c(0,50), 
+     las = 1, 
+     main = "LKP - Destino",
+     xlab = "Distância (NM)",
+     ylab = "Frequência")
+abline(v = mean(DF_SAR$Distancia_LKP_Dest), lty = "dashed", col = "red")
+abline(v = median(DF_SAR$Distancia_LKP_Dest), lty = "dashed", col = "blue")
+
+boxplot(DF_SAR$Distancia_LKP_Dest, 
+        ylab = "Distância (NM)",
+        main = "Distância LKP e Destino")
+
+plot(DF_SAR$Distancia_LKP_Dest, 
+     main = "LKP - Destino",
+      ylab = "Distância (NM)")
+abline(h = c(40, 65, 150, 565), lty = "dashed", col = "red")
+```
+
+```{r}
+ggplot(resultados_azimute, aes(x = `distância centro-base`,
+                               y = `ângulo centro-base`)) +
+  geom_point() +
+  stat_ellipse()
+```
+
