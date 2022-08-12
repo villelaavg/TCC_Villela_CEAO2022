@@ -4,6 +4,8 @@ Repositório destinado a disponibilizar os códigos gerados no Trabalho de Concl
 O arquivo está divido em 3 pastas.
 
 Na pasta "Replicabilidade_Casos_SAR", por meio de um interpretador, é possível utilizar os quatro arquivos disponibilizados na pasta para replicar os resultados obtidos dos 73 casos reais analisados no trabalho.
+É importante destacar que para a correto replicabilidade, é necessário criar dentro do projeto do código uma pasta vazia chamada "resultados_casos", onde os resultados serão armazenadas.
+Para que sejam criados novos resultados, é possível inserir as coordenadas geográficas no arquivo "casos_SAR.xlsx", de acordo com os casos já constantes no documento. 
 
 Na pasta "Python", além dos códigos estão os resultados gerados.
 
